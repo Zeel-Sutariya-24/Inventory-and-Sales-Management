@@ -460,14 +460,7 @@ The API returns appropriate HTTP status codes and error messages for common prob
 ---
 
 # Demo
-
-If the application is deployed, add the deployed URL here:
-
-```text
-Demo: <YOUR_DEPLOYED_URL>
-```
-
-If no deployment is available, the application can be run locally using the instructions above.
+no deployment is available, the application can be run locally using the instructions above.
 
 ---
 
