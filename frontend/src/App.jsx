@@ -1,7 +1,7 @@
-import Customers from "./pages/Customers";
+import Products from "./pages/Products";
 
 function App() {
-  return <Customers />;
+  return <Products />;
 }
 
 export default App;
