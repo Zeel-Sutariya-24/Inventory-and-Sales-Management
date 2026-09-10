@@ -1,7 +1,7 @@
-import Products from "./pages/Products";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  return <Products />;
+  return <Dashboard />;
 }
 
 export default App;
