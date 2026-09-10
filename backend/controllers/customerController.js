@@ -25,7 +25,7 @@ const createCustomer = async (req, res) => {
 
 const getCustomers = async (req, res) => {
   try {
-    const { search = "", page = 1, limit = 10 } = req.query;
+    const { search = "", page = 1, limit = 5 } = req.query;
 
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
