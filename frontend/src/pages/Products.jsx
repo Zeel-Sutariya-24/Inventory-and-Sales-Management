@@ -4,9 +4,11 @@ import ProductList from "../components/ProductList";
 
 function Products() {
   const [refresh, setRefresh] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const handleProductChange = () => {
     setRefresh((previous) => !previous);
+    setSelectedProduct(null);
   };
 
   return (
@@ -14,11 +16,13 @@ function Products() {
       <h1>Products</h1>
 
       <ProductForm
+        product={selectedProduct}
         onProductChange={handleProductChange}
       />
 
       <ProductList
         refresh={refresh}
+        onEdit={setSelectedProduct}
       />
     </div>
   );

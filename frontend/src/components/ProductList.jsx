@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { deleteProduct } from "../services/productService";
 
-function ProductList({ refresh }) {
+function ProductList({ refresh, onEdit }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -33,6 +34,18 @@ function ProductList({ refresh }) {
             });
     }, [refresh, search, page]);
 
+    const handleDelete = async (productId) => {
+        try {
+            await deleteProduct(productId);
+
+            setProducts((previous) =>
+                previous.filter((product) => product._id !== productId)
+            );
+        } catch (error) {
+            console.error("Failed to delete product:", error);
+        }
+    };
+
     return (
         <div>
             <h2>Product List</h2>
@@ -61,6 +74,12 @@ function ProductList({ refresh }) {
                         {product.stock <= 5 && <strong>Low Stock</strong>}
                     </p>
                     <p>Status: {product.status}</p>
+                    <button onClick={() => handleDelete(product._id)}>
+                        Delete
+                    </button>
+                    <button onClick={() => onEdit(product)}>
+                        Edit
+                    </button>
                 </div>
             ))}
 

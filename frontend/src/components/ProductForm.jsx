@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { productSchema } from "../validation/productValidation";
-import { createProduct } from "../services/productService";
+import {
+    createProduct,
+    updateProduct,
+} from "../services/productService";
 
 const initialFormData = {
     name: "",
@@ -11,10 +14,23 @@ const initialFormData = {
     status: "Active",
 };
 
-function ProductForm({ onProductChange }) {
+function ProductForm({ product, onProductChange }) {
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
+
+    useEffect(() => {
+        if (product) {
+            setFormData({
+                name: product.name,
+                sku: product.sku,
+                price: product.price,
+                stock: product.stock,
+                description: product.description || "",
+                status: product.status,
+            });
+        }
+    }, [product]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,23 +59,33 @@ function ProductForm({ onProductChange }) {
 
         setErrors({});
 
+        const isEditing = Boolean(product);
+
         try {
-            const data = await createProduct(result.data);
+            const data = isEditing
+                ? await updateProduct(product._id, result.data)
+                : await createProduct(result.data);
 
             console.log("Product response:", data);
 
             setFormData(initialFormData);
-            setSuccessMessage("Product created successfully!");
+
+            setSuccessMessage(
+                isEditing
+                    ? "Product updated successfully!"
+                    : "Product created successfully!"
+            );
+
             onProductChange();
         } catch (error) {
-            console.error("Failed to create product:", error);
+            console.error("Failed to save product:", error);
             setSuccessMessage("");
         }
     };
 
     return (
         <div>
-            <h2>Add Product</h2>
+            <h2>{product ? "Edit Product" : "Add Product"}</h2>
             {successMessage && <p>{successMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <div>
@@ -127,7 +153,9 @@ function ProductForm({ onProductChange }) {
                     </select>
                 </div>
 
-                <button type="submit">Save Product</button>
+                <button type="submit">
+                    {product ? "Update Product" : "Save Product"}
+                </button>
             </form>
         </div>
     );
