@@ -4,20 +4,33 @@ import { deleteCustomer } from "../services/customerService";
 function CustomerList({ onEdit, refresh }) {
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
+    const [pagination, setPagination] = useState({
+        page: 1,
+        limit: 5,
+        total: 0,
+        totalPages: 1,
+    });
     useEffect(() => {
-        fetch("http://localhost:5000/api/customers")
+        fetch(
+            `http://localhost:5000/api/customers?search=${encodeURIComponent(
+                search
+            )}&page=${page}&limit=5`
+        )
             .then((response) => response.json())
             .then((data) => {
                 console.log("Customers:", data);
                 setCustomers(data.customers);
+                setPagination(data.pagination);
                 setLoading(false);
             })
             .catch((error) => {
                 console.error("Failed to fetch customers:", error);
                 setLoading(false);
             });
-    }, [refresh]);
+    }, [refresh, search, page]);
 
     const handleDelete = async (customerId) => {
         try {
@@ -34,6 +47,12 @@ function CustomerList({ onEdit, refresh }) {
     return (
         <div>
             <h2>Customer List</h2>
+            <input
+                type="text"
+                placeholder="Search by name, phone or email"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
 
             {loading && <p>Loading customers...</p>}
 
@@ -55,6 +74,26 @@ function CustomerList({ onEdit, refresh }) {
                     </button>
                 </div>
             ))}
+
+            <div>
+                <button
+                    disabled={pagination.page === 1}
+                    onClick={() => setPage((previous) => previous - 1)}
+                >
+                    Previous
+                </button>
+
+                <span>
+                    Page {pagination.page} of {pagination.totalPages}
+                </span>
+
+                <button
+                    disabled={pagination.page === pagination.totalPages}
+                    onClick={() => setPage((previous) => previous + 1)}
+                >
+                    Next
+                </button>
+            </div>
 
         </div>
     );

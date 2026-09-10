@@ -9,7 +9,7 @@ export const customerSchema = z.object({
   phone: z
     .string()
     .trim()
-    .min(7, "Phone number must be at least 7 characters"),
+    .min(10, "Phone number must be at least 10 characters"),
 
   email: z
     .string()
