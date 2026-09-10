@@ -124,9 +124,8 @@ AppMixo/
 Clone the repository:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd AppMixo
-```
+git clone https://github.com/Zeel-Sutariya-24/Inventory-and-Sales-Management.git
+cd Inventory-and-Sales-Management
 
 ## Backend
 
